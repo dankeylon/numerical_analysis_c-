@@ -1,0 +1,54 @@
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+float func(float x);
+float func_prime(float x);
+float bisection_method(float a, float b, float TOL);
+float newtons_method(float init_guess);
+
+int main()
+{
+    float root_bisection = bisection_method(-1, 1, .00000001);
+    float root_newton = newtons_method(3);
+    cout << "Root of x^2(Bisection): " << root_bisection << endl;
+    cout << "Root of x^2(Newton):" << root_newton << endl;
+
+    return 0;
+}
+
+float bisection_method(float left_bound, float right_bound, float TOL){
+    float guess;
+    while(abs((left_bound-right_bound)/2.0) > TOL){
+        guess = (left_bound+right_bound)/2.0;
+        if (func(guess) == 0){
+            break;
+        }
+        else if( (func(right_bound)*func(left_bound)) < 0 ){
+            right_bound = guess;
+        }
+        else{
+            left_bound = guess;
+        }
+    }
+
+    return guess;
+
+}
+
+float newtons_method(float init_guess){
+    float guess = init_guess;
+    for(int ctr = 0; ctr < 200 ;ctr++ ){
+        guess = guess - func(guess)/func_prime(guess);
+    }
+    return guess;
+
+}
+float func(float x){
+    return x*x;
+}
+
+float func_prime(float x){
+    return 2*x;
+}
