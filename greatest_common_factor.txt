@@ -1,0 +1,97 @@
+/*
+Author: Daniel C. Keylon
+Date: 5/2/2017
+
+Implements a simple (but resource intensive) algorithm
+to find the greatest common factor of two numbers.
+Written mostly as an exercise to refresh myself on C++
+syntax.
+
+*/
+
+#include <iostream>
+#include <vector>
+#include <math.h>
+#include <algorithm>    // std::sort
+
+using namespace std;
+int gcf(int a, int b);
+std::vector<int> factor(int number);
+
+int main()
+{
+    cout << "Factor: " << gcf(210, 156) << endl;
+    return 0;
+}
+
+int gcf(int a, int b){
+
+    if(a < 0 or b < 0){
+        cout << "Error: integer inputs must be greater than zero"<< endl;
+        return 0;
+    }
+    if(a == b){
+        return a;
+    }
+
+    std::vector<int> a_factors = factor(a);
+    std::vector<int> b_factors = factor(b);
+
+    std::sort (a_factors.begin(), a_factors.end());
+    std::sort (b_factors.begin(), b_factors.end());
+
+    int common_factor = 0;
+
+    int ctr;
+    int iter;
+
+    if( a > b)
+    {
+        for(ctr = a_factors.size()-1; ctr >= 0; ctr-- )
+        {
+            for(iter = b_factors.size()-1; iter >= 0; iter-- )
+            {
+                if(a_factors[ctr] == b_factors[iter] && a_factors[ctr] > common_factor)
+                {
+                    common_factor = a_factors[ctr];
+                    break;
+                }
+            }
+        }
+
+    }
+    else{// b>a
+        for(ctr = b_factors.size() - 1; ctr >= 0; ctr-- )
+        {
+            for(iter = a_factors.size() - 1; iter >= 0; iter-- )
+            {
+                if(b_factors[ctr] == a_factors[iter] && b_factors[ctr] > common_factor)
+                {
+                    common_factor = b_factors[ctr];
+                    break;
+                }
+            }
+        }
+
+
+    }
+    return common_factor;
+
+}
+
+std::vector<int> factor(int number){
+
+    std::vector<int> factors;
+    int divisor = 1;
+
+    while (divisor <= ceil(number/2)){
+        if(number%divisor == 0){
+            factors.push_back(divisor);
+            factors.push_back(number/divisor);
+        }
+        divisor++;
+    }
+
+    return factors;
+
+}
